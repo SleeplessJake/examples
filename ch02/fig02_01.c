@@ -2,11 +2,30 @@
 // A first program in C 
 #include <stdio.h>
 
-// function main begins program execution 
+int width = 0;
+int height = 0;
+int area = 0;
+
+//main
 int main( void )
 {
-   printf( "Welcome to C!\n" );
+   printf( "Hello lets solve some equations! Enter a width please: " );
+   getInput(width);
+   printf("Awesome! Now please enter a height: ");
+   getInput(height);
+   area = width * height;
+
+   printf("\nWidth: %d\n Height: %d\n Area: %d", width, height, area);
+
+
+   return 0;
+
 } // end function main 
+
+//scanf input from console -- INT
+int getInput(int input) {
+	scanf("d", &input);
+}
 
 
 /**************************************************************************
