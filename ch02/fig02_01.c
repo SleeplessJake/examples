@@ -2,30 +2,48 @@
 // A first program in C 
 #include <stdio.h>
 
+/*
+	Jacob Biles
+	Homework 01 - 1/27/22
+	1/22/2022
+
+	The goal of this assignment is to learn and get comfortable with our IDE and figure out some basics of c.
+	*/
+
+
+//Main paramaters int to zero;
 int width = 0;
 int height = 0;
 int area = 0;
+int dividedValues = 0;
+
+//bool for requring int
+int isAnInt = 0;
 
 //main
-int main( void )
+int main(void)
 {
-   printf( "Hello lets solve some equations! Enter a width please: " );
-   getInput(width);
-   printf("Awesome! Now please enter a height: ");
-   getInput(height);
-   area = width * height;
 
-   printf("\nWidth: %d\n Height: %d\n Area: %d", width, height, area);
+	printf("Hello lets solve some equations! Enter a width please: ");
+	scanf("%d", &width);
+	printf("Awesome! Now please enter a height: ");
+	scanf("%d", &height);
+	area = width * height;
+
+	printf("\nWidth: %d\nHeight: %d\nArea: %d\n", width, height, area);
+
+	dividedValues = height / width;
 
 
-   return 0;
+	return 0;
 
 } // end function main 
 
-//scanf input from console -- INT
-int getInput(int input) {
-	scanf("d", &input);
-}
+//scanf input from console -- INT -- REMOVED FUNCTION (need to learn about pointers)
+													// * Learning now for methods need
+													// * pointers -- (* , >>) these symbols
+													// * what do they mean??
+
 
 
 /**************************************************************************
