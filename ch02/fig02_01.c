@@ -6,7 +6,7 @@
 	Jacob Biles
 	Homework 01 - 1/27/22
 	1/22/2022
-
+	CS 2060
 	The goal of this assignment is to learn and get comfortable with our IDE and figure out some basics of c.
 	*/
 
