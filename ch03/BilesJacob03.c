@@ -30,7 +30,7 @@ int main(void)
 	double saleTotal = 0;
 	double dayTotalHours = 0;
 	double dayTotalSales = 0;
-	unsigned int boardCount = 1;
+	unsigned int boardCount = 0;
 
 
 	//Main Loop not equal -1
@@ -57,9 +57,9 @@ int main(void)
 			saleTotal = calculateTotal(saleHours);
 			dayTotalSales += saleTotal;
 			dayTotalHours += saleHours;
-			puts("Board\t\tHours\t\tCost");
-			printf("%d\t\t%.2f\t\t%.2f\n", boardCount, saleHours, saleTotal);
 			boardCount++;
+			puts("Board\t\tHours\t\tCost");
+			printf("%d\t\t%.2f\t\t%.2f\n\n", boardCount, saleHours, saleTotal);
 		}
 
 	}
