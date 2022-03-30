@@ -1,472 +1,483 @@
+// JACOB BILES
+// ITERATION 01
+// CS 2060
+// DUE -- 3/31/2022
 
 
 
-//// #****#  LIBRARIES  #****# ////
 
-/// ***  Libraries  *** ///
+
+////##########################################////
+////####                                  ####////
+////####**#            TODO            #**####////
+////####                                  ####////
+////##########################################////
+
+/* ADD PROGRAM DESC*/
+/* CLEAN UP COMMENTING -- FUNCTIONS */
+
+
+
+////##########################################////
+////####                                  ####////
+////####**#          LIBRARIES         #**####////
+////####                                  ####////
+////##########################################////
+
+
 // Standard Input Output
 #include <stdio.h>
 
+
 // c Type
 #include <ctype.h>
+
 
 // Standard Bool
 #include <stdbool.h>
 
 
 
-//// #****#  CONST/DEFINITION INTILIZATION  #****# ////
 
-/// ***  ADMIN INFO  *** ///
-// ADMIN PIN
+
+////##########################################////
+////####                                  ####////
+////####**#  DEFINITIONS // CONSTANTS  #**####////
+////####                                  ####////
+////######          ADMIN_INFO          ######////
+////####                                  ####////
+////##########################################////
+
+
+
+/// ### DEFINITION ### // ADMIN_PIN ///
+/// Correct PIN Number for USER INPUT
 #define ADMIN_PIN 4932
 
-// Max Logon Attempts
+
+
+/// ### DEFINITION ### // MAX_LOGON_ATTEMPTS ///
+//  Max Logon Attempts
+//  For Use in ('dailyLogOn') ### FUNCTION ###
 #define MAX_LOGON_ATTEMPTS 3
 
-// Login Quit Number -- for ('SEATING_CHOICES_VAL_INPUT')
+
+
+/// ### DEFINITION ### // LOGIN_QUIT_NUMBER ///
+//  The Last Spot in ('SEATING_CHOICES_VAL_INPUT') ### DEFINITION ### //
+//  For Use in ('isLoggedOn')
+//  ('Q') Option
 #define LOGIN_QUIT_NUMBER 3
 
 
-/// ***  SEATING INFO  *** ///
-// Number of Seating Choices -- Excluding Quit ('Q')
+
+
+
+///###########################################///
+///####                                   ####///
+///######          SEATING_INFO         ######///
+///####                                   ####///
+///###########################################///
+
+
+
+///  ### DEFINITION ### // SEATING_CHOICES_SIZE ///
+//   Number of Seating Choices
+//   Excludes Quit Which is Represented With +1 in ('SEATING_CHOICES_VAL_INPUT') ARRAY
 #define SEATING_CHOICES_SIZE 3
 
-const double SEATING_CHOICE_PRICE_RANGE[SEATING_CHOICES_SIZE][2] = { {200,500}, {75,200}, {9.99,75} };
+
+
+/// ### DEFINITION ### // SEATING_CHOICE_PRICE_RANGE ///
+//  Range of Price Seats Can Be
+//  [2] Slots for MIN/MAX
+//  INPUT For ('changePrice') ### FUNCTION ###
+const double SEATING_CHOICE_PRICE_RANGE[SEATING_CHOICES_SIZE][2] = {
+
+
+	{200, 500} /* MIN - Courtside Seating - MAX */,
+	{75, 200}  /* MIN - Mid-Level Seating - MAX */,
+	{9.99, 75} /* MIN - Upper-Level Seating - MAX */,
+
+
+}; ///  ## END ##  // ### DEFINITION ### // SEATING_CHOICE_PRICE_RANGE ///
+
+
+
+/// ### DEFINITION ### // SEATING_CHOICES_VAL_INPUT ///
+//  Valid CHAR INPUT from USER 
+//  Each Slot is a Valid Entry
+//  +1 For Inclusion of Quit Option -- 'Q'
+const char SEATING_CHOICES_VAL_INPUT[SEATING_CHOICES_SIZE + 1] = {
+
+
+	'C' /* Courtside Seating */,
+	'M' /* Mid-Level Seating */,
+	'U' /* Upper-Level Seating */,
+	'Q' /* Quit */,
+
+
+};///  ## END ##  // ### DEFINITION ### // SEATING_CHOICE_VAL_INPUT ///
+
+
+
+/// ### DEFINITION ### // ***  TICKET_CHARACTER_ARRAY_POINTER  *** ///
+//  Allows For Easier Printing of Name Options
+//  Max Size For Each String is 32 Characters (Exclusive For ('\0') in [32])
+const char* SEATING_CHOICES_PTR[SEATING_CHOICES_SIZE][32] = {
+
+
+{"(C)Courtside Seats" } /* Courtside Seating */,
+{"(M)Middle Level Seats"} /* Mid-Level Seating */,
+{"(U)Upper Level Seats"} /* Mid-Level Seating */,
+
+
+};///  ## END ##  // ### DEFINITION ### // SEATING_CHOICE_PTR ///
+
+
+
+
+
+///##########################################///
+///####                                  ####///
+///####           CHARITY_INFO           ####///
+///####                                  ####///
+///##########################################///
+
+
+
+/// ### DEFINITION ### // CHARITY_PERCENTAGE_RANGE ///
+//  Range of Price Seats Can Be
+//  [2] Slots for MIN/MAX
+//  INPUT For ('changePrice') ### FUNCTION ###
 const double CHARITY_PERCENTAGE_RANGE[2] = { 0.04, .25 };
 
-// Valid Character Input Array -- +1 for Inclusion of Quit ('Q')
-const char SEATING_CHOICES_VAL_INPUT[SEATING_CHOICES_SIZE + 1] = { 'C', 'M', 'U','Q' };
-
-// Character Pointer for Listing Out Seating Options
-const char* SEATING_CHOICES_PTR[SEATING_CHOICES_SIZE][32] = {
-{"(C)Courtside Seats" },
-{"(M)Middle Level Seats"},
-{"(U)Upper Level Seats"}
-};
 
 
-/// ***  TICKET INFO  *** ///
+
+
+///##########################################///
+///####                                  ####///
+///####           TICKET_INFO            ####///
+///####                                  ####///
+///##########################################///
+
+
+
+/// ### DEFINITON ### // TICKET_CHOICES_SIZE ///
 // Number of Ticket Options
+// For ('TICKET_CHOICES_VAL_INPUT') and ('TICKET_CHOICES_PTR') ### DEFINITIONS ###
 #define TICKET_CHOICES_SIZE 4
 
-// Valid Ticket Input 
-const unsigned int TICKET_CHOICES_VAL_INPUT[TICKET_CHOICES_SIZE] = { 1,2,3,4 };
 
-//Character Pointer for Listing Out Ticket Options
+
+/// ### DEFINITION ### // TICKET_CHOICES_VAL_INPUT ///
+//  Valid INT INPUT From USER 
+//  Each Slot is a Valid Entry
+const unsigned int TICKET_CHOICES_VAL_INPUT[TICKET_CHOICES_SIZE] = {
+
+
+	1 /* 1 Tickets,[0] */,
+	2 /* 2 Tickets,[1] */,
+	3 /* 3 Tickets,[2] */,
+	4 /* 4 Tickets,[3] */,
+
+
+};//  ## END ##  // ### DEFINITION ### // TICKET_CHOICES_VAL_INPUT
+
+
+
+/// ### DEFINITION ### // ***  TICKET_CHARACTER_ARRAY_POINTER  *** ///
+// Allows For Easier Printing of Name Options
+// Max Size For Each String is 32 Characters (Exclusive For ('\0') in [32])
 const char* TICKET_CHOICES_PTR[TICKET_CHOICES_SIZE][32] = {
-{"Single Pack (1 ticket)" },
-{"Double Pack (2 tickets)"},
-{"Triple Pack (3 tickets)"},
-{"Family Pack (4 tickets)"}
-};
+
+
+{"Single Pack (1 ticket)" } /* 1 Tickets,[0] */,
+{"Double Pack (2 tickets)"} /* 2 Tickets,[1] */,
+{"Triple Pack (3 tickets)"} /* 3 Tickets,[2] */,
+{"Family Pack (4 tickets)"} /* 4 Tickets,[3] */,
+
+
+};//  ## END ##  // ### DEFINITION ### // TICKET_CHOICES_PTR
 
 
 
-//// #****#  Prototypes -- LONG DESC  #****# ////
 
-/// ***  PROTOTYPING FUNCTIONS  *** ///
-/***DESC***
 
-Clear Buffer uses the getChar function to detect when the buffer is left with the new line character -- if not it will clear
-out the buffer leaving the new line character ending the function.
+///##########################################///
+///####                                  ####///
+///####**      FUNCTION_PROTOTYPES     **####///
+///####                                  ####///
+///##########################################///
 
-***END DESC***/
+
+
+/// ***  CLEAR_BUFFER  *** ///
+//       ### DESC ###       //
+/*  Clear Buffer -- Uses the getChar function to detect when the BUFFER is left with the new line character.
+ *  If not it will continue to clear out the buffer leaving the new line character ('\n') ending the function.   */
 void clearBuffer(void);
 
 
-/***DESC***
 
-Adming Logon starts the program off by asking the user for a predetermined pin that has ben set up. The
-user will have 3 attempts to log on to the program. If the user fails to do so the program will end.
-It returns a bool of TRUE for a sucessful logon and FALSE for a failed one.
-
-***END DESC***/
+/// ***  ADMIN_LOG_ON  *** ///
+//       ### DESC ###       //
+/*  Admin Log On -- Gathers USER INPUT then compares it to ('ADMIN_PIN') ### Definition ###.
+ *
+ *  If the INPUT matches the PIN number -- OUTPUTS : TRUE
+ *  Otherwise -- OUTPUTS : FALSE                                                          */
 bool adminLogOn(void);
 
 
-/***DESC***
 
-Change Price takes in two doubles min and max respectively, it also takes in a third double* value. From these inputs it prompts the user to
-enter a new value for the third double* value whilst respecting the range. It contiues to promp the user until they do so.
+/// ***  DAILY_LOG_ON  *** ///
+//       ### DESC ###       //
+/*  Daily Log On - The inital start to the program.
+ *
+ *  It PROMPTS for input from the USER for the ('ADMINT_PIN') ### DEFINITION ### up to (<= 3) THREE times
+ *
+ *  After ONE failed attempt -- OUTPUTS : DIFFERENT PROMPT
+ *  After the THIRD FAILED log on attempt -- OUTPUTS : FALSE
+ *  If INPUT matches ('ADMIN_PIN') ### DEFINITION ### -- OUTPUTS : TRUE
+ *
+ *  Using the ('adminLogOn') ### FUNCTION ### to validate authenticity of INPUT                        */
+bool dailyLogOn(void);
 
-***END DESC***/
+
+
+/// ***  CHANGE_PRICE  *** ///
+//       ### DESC ###       //
+/*  Change Price -- Takes INPUT from USER to set the price of the days tickets.
+ *  It INPUTS a MIN/MAX alongside a slot from ('seatPrices[]') ARRAY.
+ *  Continuing to reprompt the user untill a VALID entry is made then updating the ARRAY slot to this Value  */
 void changePrice(const double, const double, double*);
 
 
-/***DESC***
 
-Day Set Up takes in the seatPrice array[] and the charityPercentage of the sales Program and calls the changePrice
-function with predetermined ranges for each seat determined. The same goes for the charity percentage where a range
-has been determined.
-
-***NOTE*** New seating options needs to be added inside the switch statement
-
-***END DESC***/
+/// ***  DAY_SET_UP  *** ///
+//       ## NOTE ##       //
+/*  ANY NEW SEATING OPTIOSN WILL BE REQUIRED TO BE SET UP HERE
+ *  IF NOT SET UP PROPERLY THE RESULT WILL NOT HAVE A PRICE SET  */
+ //     ### DESC ###      //
+ /*  Day Set Up -- Uses a FOR LOOP to iterate through each slot in ('seatPrices') ARRAY
+ *
+ *   Determining if the MAX is GREATER('>') than ONE ('1')
+ *   If it is then ('charityPercent') is set up instead
+ *
+ *   In Both Cases using the Iterator to dertermien which MIN / MAX range is applicable. */
 void daySetUp(double[], double*);
 
 
-/***DESC***
 
-Confirm Selection returns a BOOL value based off a user selection of yes or no. It first prompts the user with some pre-entered
-data to confirm the users choice. It will then reprompt the user untill a correct selection is made (Y/N)
-
-***END DESC***/
+/// ***  CONFIRM_SELECTION  *** ///
+//          ### DESC ###         //
+/*  Confirm Selection -- PROMPTS and INPUTS from USER to determine their entry is what they meant
+ *
+ *  If they Select No -- OUTPUTS FALSE
+ *  If they Select Yes -- OUTPUTS TRUE
+ *  If Neither -- OUTPUTS REPROMPT
+ *
+ *  Determines if INT or CHAR based on if value is GREATER ('>') than 31 based on special ASCII CHAR */
 bool confirmSelection(const int, const size_t);
 
 
-/***DESC
 
-Seat Selection RETURNS a Size_T value based off a user selection of their seating choices. This function will check the users
-input and continue to loop untill a valid entry is made. Once a valid entry is made the function ('confirmSelection') is called
-ask the user if the input they entered is valid / what they meant to enter. When confirmed the returned type will be set to ('i')
-which is the postion in ('SEAT_CHOICES_VAL_INPUT'), ('SEATING_CHOICES_PTR'), or ('seatPrices[]')
-
-***NOTE*** New seating options needs to be added inside the ('SEATING_CHOICES_VAL_INPUT') const array
-
-***END DESC***/
+/// ***  SEAT_SELECTION  *** ///
+//        ### DESC ###        //
+/*  Seat Selection -- PROMPTS and INPUTS USER ('ticketSelection') based on
+ *  the valid choices in ('TICKET_CHOICE_VAL_INPUT') ### DEFINITION ###
+ *
+ *  If they select a VALID selection -- OUTPUTS SIZE_T
+ *  If INVALID selection -- REPROMPTS USER
+ *
+ *  OUTPUTS a SIZE_T representing the USER selection of seating          */
 size_t seatSelection(const double[], const double);
 
 
-/***DESC
 
-Ticket Selection RETURNS a Size_T value based off a user selection of their ticket choices. This function will check the users
-input and continue to loop untill a valid entry is made. Once a valid entry is made the function ('confirmSelection') is called
-ask the user if the input they entered is valid / what they meant to enter. When confirmed the returned type will be set to ('i')
-which is the postion in ('TICKET_CHOICES_VAL_INPUT') or ('TICKET_CHOICES_PTR').
-
-***NOTE*** New seating options needs to be added inside the ('TICKET_CHOICES_VAL_INPUT') const array
-
-***END DESC***/
+/// ***  TICKET_SELECTION  *** ///
+//         ### DESC ###         //
+/*  Ticket Selection -- PROMPTS and INPUTS USER ('seatSelection') based on
+ *  the valid choices in ('SEAT_CHOICE_VAL_INPUT') ### DEFINITION ###
+ *
+ *  If they select a VALID selection -- OUTPUTS SIZE_T
+ *  If INVALID selection -- REPROMPTS USER
+ *
+ *  OUTPUTS a SIZE_T representing the USER selection of tickets          */
 size_t ticketSelection(void);
 
 
-/***DESC
 
-Calculate Total takes a position in the ('seatPrices[]') array based off the users selection. It will then multiply this value by the
-number of tickets ordered from the user. The function will then return the double that is calculated from muliplying these values.
-
-***END DESC***/
+/// ***  CALCULATE_TOTAL  *** ///
+//         ### DESC ###        //
+/*  Calculate Total -- Calculates the USERS total
+ *  Takes USERS ('usersSeatingChoice') and MULTIPLIES (*) by USERS ('usersTicketSelection')
+ *
+ *  OUTPUTS a DOUBLE to represent the USERS total                                        */
 double calculateTotal(const double*, const size_t);
 
 
-/***DESC
 
-Give To Charity takes the calculated ('userTotal') from ('calculateTotal') and then multiplies this by ('charityPercentage') which is
-determined inside ('daySetUp') -and- ('changePrice'). It then RETURNS this double as the amount going to charity.
-
-***END DESC***/
+/// ***  GIVE_TO_CHARITY  *** ///
+//         ### DESC ###        //
+/*  Give To Charity -- Takes ('usersTotal') and MULTIPLES ('*') by the days charity percentage
+ *
+ *  OUTPUTING a DOUBLE to represent the share charity gets from the sale                    */
 double giveToCharity(const double, const double);
 
 
-/***DESC
 
-User Payment takes prompts the user for a valid zipcode entry
-LATER Will Process a Credit Card Transaction
-Won't Continue untill completed
-
-***END DESC***/
+/// ***  USER_PAYMENT  *** ///
+//       ### DESC ###       //
+/*  User Payment -- Ficticious User Payment
+ *
+ *  PROMPTS USER and INPUTS from USER their zipcode.
+ *  Which must be GREATER than ('>') 9999 but LESS than ('<') 100000
+ *
+ *	If VALID -- PASS STEP
+ *	If INVALID -- REPROMPT USER
+ *
+ *  Eventually a Credit/Debit payment will be done here           */
 void userPayment();
 
-/***DESC
-
-Update Tickets Sold takes the ('userTicketSelection') and then adds it to ('ticketsSold[]') within the element of ('userSelectedSeat')
-
-***END DESC***/
-void updateTicketsSold(unsigned int*, const size_t, const size_t);
 
 
-/***DESC
-
-Update Tickets Sold takes the ('actualProfit') and then adds it to ('seatSales[]') within the element of ('userSelectedSeat')
-
-***END DESC***/
-void updateSeatSales(double*, const size_t, const double);
-
-
-/***DESC
-
-Update Tickets Sold takes the ('charityTake') and then adds it to ('charityTotals[]') within the element of ('userSelectedSeat')
-
-***END DESC***/
-void updateCharityTotals(double*, const size_t, const double);
+/// ***  UPDATE_TICKETS_SOLD  *** ///
+//           ### DESC ###          //
+/*  Update Tickets Sold -- INPUTS ('userTicketSelection') and a slot from ('ticketsSold[]') ARRAY
+ *
+ *  Determining the slot based on ('userTicketSlection') upon call*/
+void updateTicketsSold(unsigned int*, const size_t);
 
 
+
+/// ***  UPDATE_TICKETS_SOLD  *** ///
+//           ### DESC ###          //
+/*  Update Seat Sales -- INPUTS ('actualProfit') -- (The ('usersTotal') - ('charityTake') ) -- and a slot from ('seatsSold[]') ARRAY
+ *
+ *  Determining the slot based on ('userTicketSlection') upon call*/
+void updateSeatSales(double*, const double);
+
+
+
+/// ***  UPDATE_CHARITY_TOTALS  *** ///
+//       ### DESC ###       //
+/*  Update Charity Totals -- INPUTS ('charityTake') from ('giveToCharity') ### FUNCTION -- and a slot from ('charityTotals[]') ARRAY
+ *
+ *  Determining the slot based on ('userTicketSlection') upon call                                                         */
+void updateCharityTotals(double*, const double);
+
+
+
+/// ***  PRINT_RECIEPT *** ///
+//       ### DESC ###       //
+/*  Print Receipt -- Starts off by PROMPTING USER and INPUTING if they want a reciept
+ *
+ * If YES (VALID) -- OUTPUT TRUE -- CONTINUE SALE
+ * If NO (VALID) -- OUTPUT FALSE -- END SALE
+ * Else INVALID -- REPROMPT USER
+ *
+ * If TRUE -- Takes all INPUTS and OUTPUTS Formatted Reciept-type-printout         */
 void printRecipt(const double, const double, const size_t, const size_t, const unsigned int*);
 
 
 
-//// #***#  MAIN  #***# ////
+bool dailySales(double[], double, unsigned int[], double[], double[]);
 
-/// ***  MAIN  *** ///
+
+
+////##########################################////
+////####                                  ####////
+////####**              MAIN            **####////
+////####                                  ####////
+////##########################################////
+
+
+
+//// ####**  MAIN  **#### ///
 int main(void) {
 
 
-	/// ***  INITILIZATION  *** ///
-	// Seats and Tickets
-	double seatPrices[SEATING_CHOICES_SIZE] = { '\0', '\0', '\0' };
-	unsigned int ticketsSold[SEATING_CHOICES_SIZE] = { '\0' , '\0', '\0' };
-	double seatSales[SEATING_CHOICES_SIZE] = { '\0', '\0', '\0' };
-
-	// Charity
-	double charityPercentage = '\0';
-	double charityTotals[SEATING_CHOICES_SIZE] = { '\0', '\0', '\0' };
-
-	// Logon Paramaters
-	unsigned int attempts = '\0';
-	bool loggedOn = false;
 
 
 
-	//// #****#  INITIL LOG ON  #****# ////
+	////##########################################////
+	////####                                  ####////
+	////######        INITIZILIZATION       ######////
+	////####                                  ####////
+	////##########################################////
 
-	///***START OF DAY LOG ON***///
-	//Filler Text
+
+
+	// Admin Initilization
+	// Initilized to FALSE
+	bool isLoggedOn = false; // Admin Logged On
+
+
+	// Seats and Tickets Initilization
+	// Initilized to NULL character ('\0') -- 0 INT
+	double seatPrices[SEATING_CHOICES_SIZE] = { '\0', '\0', '\0' }; // Daily Seat Prices 
+	unsigned int ticketsSold[SEATING_CHOICES_SIZE] = { '\0' , '\0', '\0' }; // Daily Total Tickets Sold
+	double seatSales[SEATING_CHOICES_SIZE] = { '\0', '\0', '\0' }; // Daily Seats Sold
+
+
+	// Charity Initilization
+	// Initilized to NULL character ('\0') -- 0 INT
+	double charityPercentage = '\0'; // Charity Percentage
+	double charityTotals[SEATING_CHOICES_SIZE] = { '\0', '\0', '\0' }; // Daily Charity Totals
+
+	// Filler Text
+	// Border Text
 	puts("#######################################################################");
 
-	// Admin Logon -- Breaks for
-	// Correct PIN# -- SETS loggedOn == TRUE
-	// -- OR -- 
-	// Over 3 Attempts -- SETS/KEEPS == FALSE
-	do {
-
-
-		/// ***  DIFFERENT PRITNING FOR FAILED ATTEMPTS  *** ///
-		if (attempts >= 1) {
-
-
-			/// ***  INITIL PROMPT TO USER  *** ///
-			// Shows User Number of Attempts
-			printf("#####################  Attempt (Attempts (%u/%u)  #######################\n", attempts + 1, MAX_LOGON_ATTEMPTS);
-
-			// Filler Text
-			puts("#######################################################################");
-			puts(" ");
-			printf("%s", "           Error! Please enter the admin loging PIN #: ");
 
 
 
-			// Calls adminLogOn -- Returns ('T' -or- 'F')
-			loggedOn = adminLogOn();
-			puts("#######################################################################");
+
+	////##########################################////
+	////####                                  ####////
+	////######          ADMIN_LOGON         ######////
+	////####                                  ####////
+	////##########################################////
 
 
-		}// END FAILED CHECK
-
-
-		else {
-
-
-			/// ***  INITIL PROMPT TO USER  *** ///
-			// Filler Text
-			puts("#######################################################################");
-			puts(" ");
-			printf("%s", "              Please enter the admin loging PIN #: ");
-
-
-			//C alls adminLogOn -- Returns ('T' -or- 'F')
-			loggedOn = adminLogOn();
-			puts("#######################################################################");
-
-
-		} /// END INITIL PROMPT CHECK
-
-
-		/// ***  INCREMENTATION OF ATTEMPTS  *** ///
-		// Increaments Attempts
-		attempts++;
-
-
-	} while ((!loggedOn) && (attempts < MAX_LOGON_ATTEMPTS)); // Do untill ('validInput') is Set to True && ('attempts') is below ('MAX_LOGON_ATTEMPTS') Definition
+	// Calls ('dailyLogOn'); Function Getting PROMPTING USER for PIN
+	// Calling ('adminLogon') to Determine ('T' -or- 'F') for PIN INPUT
+	// 
+	// Determining if They Can Log on Within 3 Attempts
+	// 
+	// If VALID ENTRY - OUTPUTS TRUE
+	// If INVALID ENTRY - OUTPUTS FALSE
+	isLoggedOn = dailyLogOn();
 
 
 
-	//// #****#  SUCESSFUL LOG ON -- DAY SALES  #****# ////
+
+
+	////##########################################////
+	////####                                  ####////
+	////######       SUCESSFUL_LOGON        ######////
+	////####                                  ####////
+	////##########################################////
 
 	/// ***  SUCESSFUL LOGON CHECK  *** ///
-	// Sucessful Logon (TRUE)
-	if (loggedOn) {
+	// If the USER INPUTED ('ADMIN_PIN') ### DEFINITON ### for ('dailyLogOn') ### FUNCTION ###
+	if (isLoggedOn) {
 
 
+		dailySales(seatPrices, charityPercentage, ticketsSold, seatSales, charityTotals);
 
-		/// ***  Initilizaing  **** ///
-		// User Selections
-		size_t userSeatSelection = '\0';
-		size_t userTicketSelection = '\0';
 
-		// Users Total
-		double userTotal = '\0';
+	}//  ## END ##  // SUCCESSFUL_LOGON_CHECK // isLoggedOn
 
-		// Charity Take
-		double charityTake = '\0';
 
-		// Stadium Profits
-		double actualProfit = '\0';
 
-
-		// Filler Text
-		puts("#######################################################################");
-		puts(" ");
-		puts("                            Sucessful Logon  ");
-		puts(" ");
-		puts("#######################################################################");
-
-
-
-		//// #****#  SETTING UP DAYS PRICES -- CHANGES PRICES FOR SEATS AND THE CHARITY PERCENTAGE  #****# ////
-
-		/// ***  SETTING UP DAY   *** ///
-		// Setting up Prices and Percentage
-		daySetUp(seatPrices, &charityPercentage);
-
-
-
-
-		/// *** DO-WHILE UNTILL HIDDEN OPTION ('Q') IS PRESSED AND LOGGED ON WITH ('ADMIN_PIN') DECLERATION  *** ///
-		// Daily Sales Coninutes Untill Admin Logs In to Quit
-		do {
-
-
-			/// *** PERFORMING SALES -- CONTINUES UNTIll ('Q') is pressed continuing to ('adminLogon')  *** ///
-			// Getting ('userSeatSelection') by Calling ('seatSelection')
-			// RETURNING -- SIZE_T ('userSeatSelection')
-			userSeatSelection = seatSelection(seatPrices, charityPercentage);
-
-
-			/// ***  QUIT BUTTON PRESSED AND CONFIRMED CHECK  *** ///
-			// Checks to See if Incomming Character is the Quit Character
-			if (userSeatSelection != LOGIN_QUIT_NUMBER) {
-
-
-				// Getting ('userSeatSelection') by calling ('ticketSelection')
-				// RETURNING -- UNSIGNED INT ('userTicketSelection')
-				userTicketSelection = ticketSelection();
-
-
-				/// ***  CALCULATING USERS TOTAL AND CHARITIES TAKE  *** ///
-				// Getting Users Initl Total Before ('charityTake')
-				// RETURNING -- DOUBLE ('userTotal')
-				userTotal = calculateTotal(&seatPrices[userSeatSelection], userTicketSelection);
-
-
-				/// ***  CALCULATING STADIUM -VS- CHARITY TAKE  *** ///
-				// Takes ('userTotal') and ('charityPercentage') to calculate
-				// the amount charity Takes
-				// REURNING -- DOUBLE ('charityTake')
-				charityTake = giveToCharity(userTotal, charityPercentage);
-
-				// Takes ('userTotal') and ('charityTake') to calculate
-				// the Actual Profit for the Stadium
-				// REURNING -- DOUBLE ('actualProfit')
-				actualProfit = userTotal - charityTake;
-
-
-				/// *** VALIDATION OF PAYMENT *** ///
-				// Gathering Zip Code and (CreditCard(TBI))
-				userPayment();
-
-
-				/// ***  UPDATING TOTALS  *** //
-				// Tickets Sold Updated
-				updateTicketsSold(&ticketsSold[userSeatSelection], userSeatSelection, userTicketSelection);
-
-				// Seats Sold Updated
-				updateSeatSales(&seatSales[userSeatSelection], userSeatSelection, actualProfit);
-
-				// Charity Totals Updated
-				updateCharityTotals(&charityTotals[userSeatSelection], userSeatSelection, charityTake);
-
-
-				/// ***  PROMPTING FOR RECEPIT  *** ///
-				//First Asks if User Wants Receipt
-				//PRINTS TOTAL / CHARITY TOTAL -- ('Y')
-				//RESETS TRANSACTION -- ('N')
-				printRecipt(userTotal, charityTake, userSeatSelection, userTicketSelection, &ticketsSold[userSeatSelection]);
-
-
-			}// END QUIT CHARACTER CHECK
-
-
-			/// ***  QUIT OPTION SELECTED  **** ///
-			// If Quit Option is Selected and Confirmed
-			else {
-
-
-				/// ***  PROMPT USER  *** ///  
-				//Filler Text
-				puts("#######################################################################");
-				puts("");
-				printf("%s", "                         Enter PIN : ");
-
-
-				/// ***  VALIDATION OF PIN #  *** ///
-				// Calls ('adminLogOn') -- Returns Opposite Result
-				loggedOn = !adminLogOn();
-
-
-				/// *** SUCESSFUL LOG OUT CHECK  *** ///
-				// Prints if Sucesfully Logged Out
-				if (!loggedOn) {
-
-					//Filler Text
-					puts("");
-					puts("#######################################################################");
-					puts("#######################################################################");
-					puts("");
-					puts("                            Sucessful Logout  ");
-					puts("");
-					puts("#######################################################################");
-
-
-					/// ***  FOR EACH ELEMENT IN ('SEATING_CHOICES_SIZE') LIST OUT THE SALES  *** ///
-					//Prints All Sales of the Day
-					for (size_t i = 0; i < SEATING_CHOICES_SIZE; i++) {
-
-						//Filler Text
-						puts("#######################################################################");
-						puts("");
-
-						//Printing of Days Totals
-						printf(" %s sold %u tickets at: $%.2lf. Giving $%.2lf to charity \n", *SEATING_CHOICES_PTR[i], ticketsSold[i], seatSales[i], charityTotals[i]);
-
-						//Filler Text
-						puts("");
-						puts("#######################################################################");
-
-
-					}// END DAY SALES PRITNING
-
-
-				}// END LOGGED OUT CHECK
-
-
-				/// ***  UNSUCESSFUL LOG OUT CHECK  *** ///
-				// Prints if Failled to Log Out
-				else {
-
-					//Filler Text
-					puts("#######################################################################");
-					puts("#######################################################################");
-					puts("");
-					puts("                               Seek Admin   ");
-					puts("");
-					puts("#######################################################################");
-
-
-				}// END UNSUCESSFUL LOGG OUT CHECK
-
-
-			}// END QUIT OPTION SELECTED
-
-
-		} while (loggedOn); // Continue While ('loggedOn') is TRUE
-
-
-	}//END SUCCESSFUL LOGON CHECK -- ADMIN LOGGED OUT
-
-
-
-	//// #****#  END PROGRAM CONDITIONS  #****# ////
+	////##########################################////
+	////####                                  ####////
+	////######      UNSUCESSFUL_LOGON       ######////
+	////####                                  ####////
+	////##########################################////
 
 	/// ***  Unsucessful Logon -- (FALSE -- Initial Login) --  *** ///
 	// The User Maxed Out Attempts of the Admin Pin Authentication
@@ -484,14 +495,17 @@ int main(void) {
 
 
 
-	//// #****#  RETURNING 0 FOR MAIN  #****# ////
+	////##########################################////
+	////####                                  ####////
+	////######      RETURN 0 FOR MAIN       ######////
+	////####                                  ####////
+	////##########################################////
 
-	/// ***  RETURN -- INT -- 0 -- FOR MAIN  *** ///
-	//Returns :(INT): -- 0 -- for Sake of Proper Return for Main
+	//Returns :(INT): -0- for Sake of Proper Return for Main
 	return 0;
 
 
-} //END MAIN
+} /////  ## END ##  // ####**  MAIN  **#### /////
 
 
 
@@ -569,6 +583,84 @@ bool adminLogOn(void) {
 
 
 }// END ADMIN_LOGON
+
+
+
+bool dailyLogOn(void) {
+
+	unsigned int attempts = '\0';
+	bool isLoggedOn = false;
+
+	/// ***  DO WHILE UNTILL ADMIN LOGGED IN OR FAILED AUTHENTICATE  *** ///
+	// Continues Untill
+	// User Enters ('ADMIN_PIN') Deefition -- TRUE
+	// Attemps Exceed 3
+	do {
+
+
+
+		/// ***  USER FAILED ENTRY CHECK  *** ///
+		// If User Has Failed To Log In at Least Once
+		if (attempts >= 1) {
+
+
+
+			/// ***  REPROMPT TO USER  *** ///
+			// Shows User Number of Attempts
+			printf("#####################  Attempt (Attempts (%u/%u)  #######################\n", attempts + 1, MAX_LOGON_ATTEMPTS);
+			puts("#######################################################################");
+			puts(" ");
+			printf("%s", "           Error! Please enter the admin loging PIN #: "); // Entry Line
+
+
+
+			/// ***  CHECKING USER INPUT CALLING ('adminLogOn')  *** ///
+			isLoggedOn = adminLogOn();
+			puts("#######################################################################");
+
+
+		}//  ## END ##  // ## IF ## // *** REPROMPT_TO_USER  *** //
+
+
+
+		/// ***  INITIL_PROMPT_TO_USER  *** ///
+		//The First Time the USer is Asked For the PIN Number
+		else {
+
+
+			/// ***  INITIL PROMPT TO USER  *** ///
+			puts("#######################################################################");
+			puts(" ");
+			printf("%s", "              Please enter the admin loging PIN #: ");// Entry Line 
+
+
+
+			/// ***  CHECKING USER INPUT CALLING ('adminLogOn')  *** ///
+			isLoggedOn = adminLogOn();
+			puts("#######################################################################");
+
+
+		}//  ## END ##  // ## ELSE ## // ***  INITIL PROMPT CHECK  *** //
+
+
+		/// ***  INCREMENTATION OF ATTEMPTS  *** ///
+		// Increaments Attempts
+		attempts++;
+
+
+	} while ((!isLoggedOn) && (attempts < MAX_LOGON_ATTEMPTS)); /*  Do untill('validInput') is Set to True && ('attempts') is below('MAX_LOGON_ATTEMPTS') Definition  */
+
+
+	// ## OUTPUT ## //
+	// ##  Bool  ## //
+	/* TRUE: Sucessful Log On
+	 * Attempts Less Than 3 AND ('userInput') is the Admin PIN Number
+
+	 * FALSE: Failed Log On
+	 * Attempts Greater Than 3 */
+	return isLoggedOn;
+
+}
 
 
 /// ****  CHANGE PRICE **** ///
@@ -1138,12 +1230,12 @@ size_t ticketSelection(void) {
 	/// ***  INITIL TEXT PRITING  *** ///
 	// Initial text
 	puts("#######################################################################");
-	puts(" ");
-	puts("    Great! Now make a selection of how many tickets you'd like.");
-	puts(" ");
+	puts("                                                                       ");
+	puts("    Great! Now make a selection of how many tickets you'd like.        ");
+	puts("                                                                       ");
 	puts("#######################################################################");
 	puts("#######################################################################");
-	puts(" ");
+	puts("                                                                       ");
 
 
 	/// ***  FOR ALL ELEMENTS IN TICKET CHOICES  *** ///
@@ -1157,7 +1249,7 @@ size_t ticketSelection(void) {
 
 	} // END PRITNING OPTIONS FOR LOOP
 
-	
+
 	//Filler Text
 	puts(" ");
 	printf("%s", "                             Entry: ");
@@ -1319,8 +1411,8 @@ void userPayment() {
 			/// *** REPROMPTING USER OF ACCEPTABLE ENTRY  *** //
 			//Filler Text
 			puts("#######################################################################");
-			puts("");
-			puts("                    Error! Enter your 5 Digit Zipcode");
+			puts("                                                                       ");
+			puts("                    Error! Enter your 5 Digit Zipcode                  ");
 			printf("%s", "                             Entry: ");
 
 
@@ -1344,45 +1436,10 @@ void userPayment() {
 // 
 // Input:: unsigned int* seatSaleArrayElement ('ticketsSold'), const size_t seatSelection ('userSeatSelection'), const size_t numberOfTickets ('userTicketSelection')
 // Output: VOID
-void updateTicketsSold(unsigned int* ticketsSoldArrayElement, const size_t seatSelection, const size_t numberOfTickets) {
+void updateTicketsSold(unsigned int* ticketsSoldArrayElement, const size_t numberOfTickets) {
 
-
-	/// ***  NOTE  ** ///
-	// Requires Manual Addition For All New Seating Options
-
-
-	/// ***  SWITCH BASED OFF USER SELECTION  *** ///
-	// Switch Based Off User's Selection of Seat -- Adds ('numberOfTickets') to ('seatSaleArrayElement')
-	switch (seatSelection) {
-
-
-	case 0: // Courtside Seating
-
-		*ticketsSoldArrayElement += (unsigned int)numberOfTickets;
-
-		break;// END C::0
-
-
-	case 1: // Middle-Level Seating
-
-		*ticketsSoldArrayElement += (unsigned int)numberOfTickets;
-
-		break;// END C::1
-
-
-	case 2: // Upper-Level Seating
-
-		*ticketsSoldArrayElement += (unsigned int)numberOfTickets;
-
-		break;// END C::2
-
-
-	default: // Default Case
-
-		break;// END C:DEF
-
-
-	} // END SWITCH FOR ('seatSelection')
+	//Updating Slot (+=) to Amount
+	*ticketsSoldArrayElement += (unsigned int)numberOfTickets;
 
 
 } // END UPDATE_TICKETS_SOLD
@@ -1399,107 +1456,44 @@ void updateTicketsSold(unsigned int* ticketsSoldArrayElement, const size_t seatS
 // 
 // Input:: unsigned int* seatSaleArrayElement ('actualProfit'), const size_t seatSelection ('userSeatSelection'), const size_t numberOfTickets ('userTicketSelection')
 // Output: VOID
-void updateSeatSales(double* seatSaleArrayElement, const size_t seatSelection, const double amountAfterCharity) {
+void updateSeatSales(double* seatSaleArrayElement, const double amountAfterCharity) {
 
 
-	/// ***  NOTE  ** ///
-	// Requires Manual Addition For All New Seating Options
-
-
-	/// ***  SWITCH BASED ON USER SELECTION OF SEAT *** //
-	// Based Off User's Selection of Seat -- Adds ('amointAfterChartiy') to ('seatSalesArrayElement')
-	switch (seatSelection) {
-
-
-	case 0:// Courtside Seating
-
-		*seatSaleArrayElement += amountAfterCharity;
-
-		break;// END C::0
-
-
-	case 1:// Middle-Level Seating
-
-		*seatSaleArrayElement += amountAfterCharity;
-
-		break;// END C::1
-
-
-	case 2:// Upper-Level Seating
-
-		*seatSaleArrayElement += amountAfterCharity;
-
-		break;// END C::2
-
-
-	default:// Default Case
-
-
-		break;// END C::DEF
-
-
-	} // END SWITCH FOR ('seatSelection')
+	//Updating Slot (+=) to Amount
+	*seatSaleArrayElement += amountAfterCharity;
 
 
 }// END UPDATE_SEAT_SALES
 
 
-/// ****  UPDATE CHARITY TOTALS  **** ///
-// Short DESC:: Updates Position in ('charityTotals') Based off Profit Given to Charity
-// 
-// NOTE:: Requires Manual Addition For All New Seating Options
-// 
-// Prints:: VOID
-// 
-// Requires:: VOID
-// 
-// Input:: unsigned int* seatSaleArrayElement ('actualProfit'), const size_t seatSelection ('userSeatSelection'), const size_t numberOfTickets ('userTicketSelection')
-// Output: VOID
-void updateCharityTotals(double* charityArrayElement, const size_t seatSelection, const double givenToCharity) {
+/// ***  UPDATE_CHARITY_TOTALS  *** ///
+//  ## DESC ##
+/*  Updates a Postion Within the ('charityTotals[]') Array by Taking the
+ *  ('userSeatSelection')
+*/
+//  ## NOTE ##
+/*  Requires Manual Addition For All New Seating Options  */
+//  ## INPUT ## 
+/*  I: DOUBLE* ('CharityArrayElement ('actualProfit')'), Spot in Array ('charityTotals') Holding Charity Totals Based on Seat
+ *  I: CONST SIZE_T ('seatSelection'), The User's Choice of Seat
+ *  I: CONST DOUBLE ('giveToCharity'), The Amount To be Added to the Array Element  */
+void updateCharityTotals(double* charityTotalsSpot, const double givenToCharity) {
 
 
-	/// ***  NOTE  ** ///
-	// Requires Manual Addition For All New Seating Options
+	//Updates Position within ('charityTotals[]
+	*charityTotalsSpot += givenToCharity;
 
 
-	/// ***  SWITCH BASED ON USER SELECTION OF SEAT *** //
-	// Based Off User's Selection of Seat -- Adds ('amointAfterChartiy') to ('seatSalesArrayElement')
-	switch (seatSelection) {
+}//  ## END ## // ### FUNCTION ### // ***  UPDATE_CHARITY_TOTALS  *** //
 
 
-	case 0:// Courtside Seating
 
-		*charityArrayElement += givenToCharity;
-
-		break;// END C::0
-
-
-	case 1:// Middle-Level Seating
-
-		*charityArrayElement += givenToCharity;
-
-		break;// END C::1
-
-
-	case 2:// Upper-Level Seating
-
-		*charityArrayElement += givenToCharity;
-
-		break;// END C::2
-
-
-	default:// Default Case
-
-
-		break;// END C::DEF
-
-
-	} // END SWITCH FOR ('seatSelection')
-
-
-}// END UPDATE_CHARITY_TOTALS
-
-
+/// ***  PRINT_RECIPT  *** ///
+//  ## DESC ##
+/*  Updates Position in ('charityTotals[]') (+=) Based off Profit ('givenToCharity')  */
+//  ## NOTE ##
+/*  Requires Manual Addition For All New Seating Options  */
+//  ## INPUT ## 
 void printRecipt(const double userTotal, const double charityTake, const size_t userSeatSelection, const size_t userTicketSelection, const unsigned int* ticketsSoldArrayElement) {
 
 
@@ -1530,6 +1524,7 @@ void printRecipt(const double userTotal, const double charityTake, const size_t 
 		/// *** GETTING USER INPUT *** ///		
 		//Getting User Input
 		userInput = getchar();
+		clearBuffer();
 		puts("#######################################################################");
 
 
@@ -1572,9 +1567,9 @@ void printRecipt(const double userTotal, const double charityTake, const size_t 
 
 
 	if (isYesOrNo) {
-		int lastSeat = *ticketsSoldArrayElement;
-		int ticketSelection = userTicketSelection - 1;
-		int firstSeat = lastSeat - ticketSelection;
+		unsigned int lastSeat = *ticketsSoldArrayElement;
+		size_t ticketSelection = userTicketSelection - 1;
+		unsigned int firstSeat = lastSeat - (unsigned int)ticketSelection;
 
 		printf(
 			" ##### Biles Big Game -- Proof Of Purchase Receipt #####\n"
@@ -1588,3 +1583,184 @@ void printRecipt(const double userTotal, const double charityTake, const size_t 
 	}
 
 }// END PRINT_RECEIPT
+
+
+
+bool dailySales(double seatPrices[], double charityPercentage, unsigned int ticketsSold[], double seatSales[], double charityTotals[]) {
+	/// ***  Initilizaing  **** ///
+	//Logged On
+	bool isLoggedOn = true;
+
+	// User Selections
+	size_t userSeatSelection = '\0';
+	size_t userTicketSelection = '\0';
+
+	// Users Total
+	double userTotal = '\0';
+
+	// Charity Take
+	double charityTake = '\0';
+
+	// Stadium Profits
+	double actualProfit = '\0';
+
+
+	// Filler Text
+	puts("#######################################################################");
+	puts(" ");
+	puts("                            Sucessful Logon  ");
+	puts(" ");
+	puts("#######################################################################");
+
+
+
+	//// #****#  SETTING UP DAYS PRICES -- CHANGES PRICES FOR SEATS AND THE CHARITY PERCENTAGE  #****# ////
+
+	/// ***  SETTING UP DAY   *** ///
+	// Setting up Prices and Percentage
+	daySetUp(seatPrices, &charityPercentage);
+
+
+
+
+	/// *** DO-WHILE UNTILL HIDDEN OPTION ('Q') IS PRESSED AND LOGGED ON WITH ('ADMIN_PIN') DECLERATION  *** ///
+	// Daily Sales Coninutes Untill Admin Logs In to Quit
+	do {
+
+
+		/// *** PERFORMING SALES -- CONTINUES UNTIll ('Q') is pressed continuing to ('adminLogon')  *** ///
+		// Getting ('userSeatSelection') by Calling ('seatSelection')
+		// RETURNING -- SIZE_T ('userSeatSelection')
+		userSeatSelection = seatSelection(seatPrices, charityPercentage);
+
+
+		/// ***  QUIT BUTTON PRESSED AND CONFIRMED CHECK  *** ///
+		// Checks to See if Incomming Character is the Quit Character
+		if (userSeatSelection != LOGIN_QUIT_NUMBER) {
+
+
+			// Getting ('userSeatSelection') by calling ('ticketSelection')
+			// RETURNING -- UNSIGNED INT ('userTicketSelection')
+			userTicketSelection = ticketSelection();
+
+
+			/// ***  CALCULATING USERS TOTAL AND CHARITIES TAKE  *** ///
+			// Getting Users Initl Total Before ('charityTake')
+			// RETURNING -- DOUBLE ('userTotal')
+			userTotal = calculateTotal(&seatPrices[userSeatSelection], userTicketSelection);
+
+
+			/// ***  CALCULATING STADIUM -VS- CHARITY TAKE  *** ///
+			// Takes ('userTotal') and ('charityPercentage') to calculate
+			// the amount charity Takes
+			// REURNING -- DOUBLE ('charityTake')
+			charityTake = giveToCharity(userTotal, charityPercentage);
+
+			// Takes ('userTotal') and ('charityTake') to calculate
+			// the Actual Profit for the Stadium
+			// REURNING -- DOUBLE ('actualProfit')
+			actualProfit = userTotal - charityTake;
+
+
+			/// *** VALIDATION OF PAYMENT *** ///
+			// Gathering Zip Code and (CreditCard(TBI))
+			userPayment();
+
+
+			/// ***  UPDATING TOTALS  *** //
+			// Tickets Sold Updated
+			updateTicketsSold(&ticketsSold[userSeatSelection], userTicketSelection);
+
+			// Seats Sold Updated
+			updateSeatSales(&seatSales[userSeatSelection], actualProfit);
+
+			// Charity Totals Updated
+			updateCharityTotals(&charityTotals[userSeatSelection], charityTake);
+
+
+			/// ***  PROMPTING FOR RECEPIT  *** ///
+			//First Asks if User Wants Receipt
+			//PRINTS TOTAL / CHARITY TOTAL -- ('Y')
+			//RESETS TRANSACTION -- ('N')
+			printRecipt(userTotal, charityTake, userSeatSelection, userTicketSelection, &ticketsSold[userSeatSelection]);
+
+
+		}// END QUIT CHARACTER CHECK
+
+
+		/// ***  QUIT OPTION SELECTED  **** ///
+		// If Quit Option is Selected and Confirmed
+		else {
+
+
+			/// ***  PROMPT USER  *** ///  
+			//Filler Text
+			puts("#######################################################################");
+			puts("");
+			printf("%s", "                         Enter PIN : ");
+
+
+			/// ***  VALIDATION OF PIN #  *** ///
+			// Calls ('adminLogOn') -- Returns Opposite Result
+			isLoggedOn = !adminLogOn();
+
+
+			/// *** SUCESSFUL LOG OUT CHECK  *** ///
+			// Prints if Sucesfully Logged Out
+			if (!isLoggedOn) {
+
+				//Filler Text
+				puts("");
+				puts("#######################################################################");
+				puts("#######################################################################");
+				puts("");
+				puts("                            Sucessful Logout  ");
+				puts("");
+				puts("#######################################################################");
+
+
+				/// ***  FOR EACH ELEMENT IN ('SEATING_CHOICES_SIZE') LIST OUT THE SALES  *** ///
+				//Prints All Sales of the Day
+				for (size_t i = 0; i < SEATING_CHOICES_SIZE; i++) {
+
+					//Filler Text
+					puts("#######################################################################");
+					puts("");
+
+					//Printing of Days Totals
+					printf(" %s sold %u tickets at: $%.2lf. Giving $%.2lf to charity \n", *SEATING_CHOICES_PTR[i], ticketsSold[i], seatSales[i], charityTotals[i]);
+
+					//Filler Text
+					puts("");
+					puts("#######################################################################");
+
+
+				}// END DAY SALES PRITNING
+
+
+			}// END LOGGED OUT CHECK
+
+
+			/// ***  UNSUCESSFUL LOG OUT CHECK  *** ///
+			// Prints if Failled to Log Out
+			else {
+
+				//Filler Text
+				puts("#######################################################################");
+				puts("#######################################################################");
+				puts("");
+				puts("                               Seek Admin   ");
+				puts("");
+				puts("#######################################################################");
+
+
+			}// END UNSUCESSFUL LOGG OUT CHECK
+
+
+		}// END QUIT OPTION SELECTED
+
+
+	} while (isLoggedOn); // Continue While ('loggedOn') is TRUE'
+
+	return isLoggedOn;
+}
